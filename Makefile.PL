@@ -176,6 +176,8 @@ if ($ARGV{'--debug'}) {
     print "INC = $INC\n";
 }
 
+store_datadir_for_tests($source_tree, $config);
+
 for my $module (keys %object) {
     my $add = $module;
     $add =~ s/:/_/g;
@@ -439,4 +441,20 @@ sub parse_libtool_library_file_for_l {
         close $fh;
     }
     return $l;
+}
+
+sub store_datadir_for_tests {
+    my ($source_tree, $config) = @_;
+    open(my $fh, ">", "t/datadir") or die "cannot open > t/datadir: $!";
+    if ($source_tree) {
+        print $fh "$source_tree/data\n";
+    }
+    elsif (-x $config) {
+        my $datadir;
+        chomp($datadir = `$config --datadir`);
+    }
+    else {
+        print STDERR "I could not set GDAL data directory. Expect problems with tests.\n";
+    }
+    close $fh;
 }
