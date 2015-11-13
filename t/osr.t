@@ -5,6 +5,7 @@ BEGIN { use_ok('Geo::GDAL') };
 
 if (open(my $fh, "<", "t/datadir")) {
     my $datadir = <$fh>;
+    chomp $datadir;
     close $fh;
     Geo::GDAL::PushFinderLocation($datadir);
 }
@@ -18,16 +19,18 @@ my $src = Geo::OSR::SpatialReference->new(EPSG => 2392);
 my $dst = Geo::OSR::SpatialReference->new(EPSG => 2393);
 ok(($src and $dst), "new Geo::OSR::SpatialReference");
 
+eval {
+    Geo::OSR::CoordinateTransformation->new($src, $dst);
+};
+
 SKIP: {
-    skip "PROJSO not set", 1 if (!$ENV{PROJSO} and $^O eq 'MSWin32');
+    skip "libproj probably not installed: $@", 3 if $@;
     my ($t1, $t2);
     eval {
 	$t1 = Geo::OSR::CoordinateTransformation->new($src, $dst);
 	$t2 = Geo::OSR::CoordinateTransformation->new($dst, $src);
     };
-    ok($t1, "new Geo::OSR::CoordinateTransformation $@");
-
-    skip "new Geo::OSR::CoordinateTransformation failed",1 unless ($t1 and $t2);
+    ok($t1 && $t2, "new Geo::OSR::CoordinateTransformation $@");
 
     my @points = ([2492055.205, 6830493.772],
 		  [2492065.205, 6830483.772],

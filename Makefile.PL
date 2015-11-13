@@ -447,6 +447,7 @@ sub store_datadir_for_tests {
     my ($source_tree, $config) = @_;
     open(my $fh, ">", "t/datadir") or die "cannot open > t/datadir: $!";
     if ($source_tree) {
+        $source_tree = Cwd::abs_path($source_tree);
         print $fh "$source_tree/data\n";
     }
     elsif (-x $config) {
