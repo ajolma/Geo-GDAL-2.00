@@ -35,6 +35,9 @@ To assign environment variables, specify them as VAR=VALUE.
 
 Control the GDAL that this module is built against:
 
+  --gdal-source-tree=PATH  use PATH as the gdal source
+    the same as environment variable PERL_GDAL_SOURCE_TREE=PATH
+
   --gdal-config=PATH  use PATH as the gdal-config
     the same as environment variable PERL_GDAL_CONFIG=PATH
 
