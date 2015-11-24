@@ -182,7 +182,7 @@ if ($ARGV{'--debug'}) {
 install_share 'share';
 store_datadir_for_tests($source_tree, $config);
 
-for my $module (keys %object) {
+for my $module (sort keys %object) {
     my $add = $module;
     $add =~ s/:/_/g;
     my $LD = $Config{ld};
