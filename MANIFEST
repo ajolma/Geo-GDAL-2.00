@@ -11,6 +11,7 @@ lib/Geo/GDAL/Const.dox
 lib/Geo/GDAL.dox
 lib/Geo/OGR.dox
 lib/Geo/OSR.dox
+share/.exists
 t/00.t
 t/01.t
 t/02.t
