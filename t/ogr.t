@@ -5,7 +5,7 @@ use Test::More qw(no_plan);
 BEGIN { use_ok('Geo::GDAL') };
 
 {
-    my $datadir = dist_file('Geo-GDAL', 'gdal-datadir');
+    my $datadir = dist_file('Geo-OSR', 'gdal-datadir');
     if ($datadir && open(my $fh, "<", $datadir)) {
         $datadir = <$fh>;
         chomp($datadir);
