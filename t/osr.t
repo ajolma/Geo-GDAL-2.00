@@ -6,11 +6,9 @@ BEGIN { use_ok('Geo::GDAL') };
 
 {
     my $datadir = dist_file('Geo-GDAL', 'gdal-datadir');
-    print STDERR "$datadir\n";
     if ($datadir && open(my $fh, "<", $datadir)) {
         $datadir = <$fh>;
         chomp($datadir);
-        print STDERR "$datadir\n";
         close $fh;
         Geo::GDAL::PushFinderLocation($datadir);
     }
