@@ -1,13 +1,17 @@
 use strict;
 use warnings;
 use Scalar::Util 'blessed';
+use File::Share ':all';
 use Test::More qw(no_plan);
 BEGIN { use_ok('Geo::GDAL') };
 
-if (open(my $fh, "<", "t/datadir")) {
-    my $datadir = <$fh>;
-    close $fh;
-    Geo::GDAL::PushFinderLocation($datadir);
+{
+    my $datadir = dist_file('Geo-GDAL', 'gdal-datadir');
+    if ($datadir && open(my $fh, "<", $datadir)) {
+        $datadir = <$fh>;
+        close $fh;
+        Geo::GDAL::PushFinderLocation($datadir);
+    }
 }
 
 # list of subs to test (documented subroutines) obtained with

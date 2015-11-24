@@ -4,6 +4,7 @@ use File::Basename;
 use ExtUtils::MakeMaker;
 use Config;
 use Cwd;
+use File::ShareDir::Install;
 
 # pick up our parameters from @ARGV
 my %ARGV;
@@ -150,8 +151,10 @@ end
 die $msg if ($gdal_config && $different_versions && !$versions_may_differ) ||
     (!$downloads_are_ok && $different_versions && !$versions_may_differ);
 
-$config = download_and_compile_gdal($my_gdal_version, $gdal_version) 
-    if $different_versions && !$gdal_config && !$versions_may_differ && $downloads_are_ok;
+if ($different_versions && !$gdal_config && !$versions_may_differ && $downloads_are_ok) {
+    $source_tree = download_and_compile_gdal($my_gdal_version, $gdal_version);
+    $config = "$source_tree/apps/gdal-config";
+}
 
 # still in the game?
 
@@ -176,6 +179,7 @@ if ($ARGV{'--debug'}) {
     print "INC = $INC\n";
 }
 
+install_share 'share';
 store_datadir_for_tests($source_tree, $config);
 
 for my $module (keys %object) {
@@ -225,7 +229,8 @@ for my $module (keys %object) {
                        'Config' => 0,
                        'File::Fetch' => 0,
                        'Capture::Tiny' => 0,
-                       'Cwd' => 0 },
+                       'Cwd' => 0,
+                       'File::ShareDir::Install' => 0 },
                    PREREQ_PM => {
                        Carp => 0,
                        Encode => 0,
@@ -233,6 +238,7 @@ for my $module (keys %object) {
                        POSIX => 0 },
                    TEST_REQUIRES => {
                        'Scalar::Util' => 0,
+                       'File::Share' => 0,
                        'Test::More' => 0 },
         );
 }
@@ -445,7 +451,7 @@ sub parse_libtool_library_file_for_l {
 
 sub store_datadir_for_tests {
     my ($source_tree, $config) = @_;
-    open(my $fh, ">", "t/datadir") or die "cannot open > t/datadir: $!";
+    open(my $fh, ">", "share/gdal-datadir") or die "cannot open > share/gdal-datadir: $!";
     if ($source_tree) {
         $source_tree = Cwd::abs_path($source_tree);
         print $fh "$source_tree/data\n";
@@ -453,9 +459,13 @@ sub store_datadir_for_tests {
     elsif (-x $config) {
         my $datadir;
         chomp($datadir = `$config --datadir`);
+        print $fh "$datadir\n";
     }
     else {
         print STDERR "I could not set GDAL data directory. Expect problems with tests.\n";
     }
     close $fh;
 }
+
+package MY;
+use File::ShareDir::Install qw(postamble);

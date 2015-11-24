@@ -919,7 +919,7 @@ package Geo::OGR;
 
 
 package Geo::OGR;
-our $VERSION = '2.00015'; # this needs to be the same as that in gdal_perl.i
+our $VERSION = '2.00016'; # this needs to be the same as that in gdal_perl.i
 
 package Geo::OGR::Driver;
 use strict;
