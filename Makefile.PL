@@ -221,6 +221,14 @@ for my $module (sort keys %object) {
                    LD => $LD,
                    OBJECT => $object{$module},
                    PM => \%PM,
+                   CONFIGURE_REQUIRES => {
+                       'strict' => 0,
+                       'warnings' => 0,
+                       'File::Basename' => 0,
+                       'ExtUtils::MakeMaker' => 0,
+                       'Config' => 0,
+                       'Cwd' => 0,
+                       'File::ShareDir::Install' => 0 },
                    BUILD_REQUIRES => {
                        'strict' => 0,
                        'warnings' => 0,
