@@ -228,6 +228,8 @@ for my $module (sort keys %object) {
                        'ExtUtils::MakeMaker' => 0,
                        'Config' => 0,
                        'Cwd' => 0,
+                       'File::Fetch' => 0,
+                       'Capture::Tiny' => 0,
                        'File::ShareDir::Install' => 0 },
                    BUILD_REQUIRES => {
                        'strict' => 0,
