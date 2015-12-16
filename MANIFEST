@@ -1,4 +1,5 @@
 MANIFEST
+Changes
 Doxyfile
 README
 Makefile
@@ -34,5 +35,3 @@ transform.dox
 check_dox.pl
 parse-for-doxygen.pl
 Changes-in-the-API-in-2.0
-META.yml
-META.json

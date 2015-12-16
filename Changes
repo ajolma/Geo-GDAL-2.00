@@ -1,0 +1,24 @@
+Geo::GDAL is a Perl API to GDAL, which has various branches with patch level releases.
+The version number of the CPAN version must increase, so it must always be the version
+for the latest patch level release of the newest branch. The first five digits of 
+the version number are from GDAL and the digits after denote the Perl module patch level.
+
+2.00019 16 Dec 2015
+  * Comment out a test, which sets huge numbers to histogram since it hits a bug in GDAL itself.
+  The bug will be fixed in GDAL 2.1
+
+2.00018 30 Nov 2015
+
+2.00017 24 Nov 2015
+
+2.00016 13 Nov 2015
+
+...
+
+2.0001 on or after 15 Sep 2015
+
+...
+
+2.0000 on or after 14 Jun 2015
+
+...

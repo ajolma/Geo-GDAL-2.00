@@ -611,7 +611,7 @@ use Geo::OSR;
 # For GDAL 2.0 or above, GDAL X.Y.Z should then
 # VERSION = X + Y / 100.0 + Z / 10000.0
 
-our $VERSION = '2.00018';
+our $VERSION = '2.00019';
 our $GDAL_VERSION = '2.0.1';
 
 =pod
