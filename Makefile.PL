@@ -359,7 +359,7 @@ end
     if ($ok) {
         for my $cmd (["cd", $gdal],
                      ["./configure"],
-                     ["make", "-j4"],
+                     [($^O =~ /bsd/i ? "gmake" : "make"), "-j4"],
                      ["cd", ".."]) 
         {
             $ok = $step->(@$cmd);
