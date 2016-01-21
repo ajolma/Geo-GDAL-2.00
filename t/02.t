@@ -40,7 +40,7 @@ ok($dataset, "OpenEx");
 # sub StartTransaction
 # sub WriteRaster
 
-$dataset = Geo::GDAL::Driver('GTiff')->Create(Name => '/vsimem/test.gtiff');
+$dataset = Geo::GDAL::Driver('GTiff')->Create(Name => '/vsimem/test.gtiff', Width => 123);
 my @list = $dataset->GetFileList();
 undef $dataset;
 
@@ -102,6 +102,13 @@ $buf = pack("$pc*", @data[80..159]);
 $dataset->WriteRaster(XOff => 0, yoff => 0, buf => $buf, BandList => [1]);
 my $data = $dataset->Band(1)->ReadTile;
 ok(($data->[0][0] == 1 and $data->[9][7] == 2), "WriteRaster ReadTile");
+
+$data[80] = 1;
+$data[159] = 2;
+$buf = pack("$pc*", @data[80..159]);
+$dataset->WriteRaster(XOff => 0, yoff => 0, buf => \$buf, BandList => [1]);
+$data = $dataset->Band(1)->ReadTile;
+ok(($data->[0][0] == 1 and $data->[9][7] == 2), "WriteRaster ReadTile 2");
 
 $data->[5][5] = 3;
 $dataset->Band(1)->WriteTile($data);

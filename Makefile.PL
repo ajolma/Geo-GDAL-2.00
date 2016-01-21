@@ -230,26 +230,31 @@ for my $module (sort keys %object) {
                        'Cwd' => 0,
                        'File::Fetch' => 0,
                        'Capture::Tiny' => 0,
-                       'File::ShareDir::Install' => 0 },
+                       'File::ShareDir::Install' => 0 
+                   },
                    BUILD_REQUIRES => {
                        'strict' => 0,
                        'warnings' => 0,
                        'File::Basename' => 0,
                        'ExtUtils::MakeMaker' => 0,
                        'Config' => 0,
+                       'Cwd' => 0,
                        'File::Fetch' => 0,
                        'Capture::Tiny' => 0,
-                       'Cwd' => 0,
-                       'File::ShareDir::Install' => 0 },
+                       'File::ShareDir::Install' => 0 
+                   },
                    PREREQ_PM => {
                        Carp => 0,
                        Encode => 0,
                        'Scalar::Util' => 0,
-                       POSIX => 0 },
+                       POSIX => 0 
+                   },
                    TEST_REQUIRES => {
                        'Scalar::Util' => 0,
-                       'File::Share' => 0,
-                       'Test::More' => 0 },
+                       'Test::More' => 0,
+                       'Test::File::ShareDir' => 0,
+                       'File::ShareDir' => 0
+                   },
         );
 }
 

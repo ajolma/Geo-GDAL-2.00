@@ -87,7 +87,7 @@ ok((defined($rat) and blessed($rat) and $rat->isa('Geo::GDAL::RasterAttributeTab
 my $c = $band->ColorInterpretation;
 my %c = map {$_=>1} Geo::GDAL::Band::ColorInterpretations;
 ok($c{$c}, "Get ColorInterpretation");
-$c = (keys %c)[0];
+$c = 'BlueBand'; # (keys %c)[0]; setting RedBand leads to core dump in geotiff.cpp:4288 #6306
 $band->ColorInterpretation($c);
 ok($band->ColorInterpretation eq $c, "Set ColorInterpretation");
 
@@ -239,7 +239,7 @@ my $b = $band1->HasArbitraryOverviews;
 ok(!$b, "HasArbitraryOverviews");
 
 Geo::GDAL::VSIF::Unlink('/vsimem/test.gtiff');
-$dataset = Geo::GDAL::Driver('GTiff')->Create(Name => '/vsimem/test.gtiff', Type => 'Float64');
+$dataset = Geo::GDAL::Driver('GTiff')->Create(Name => '/vsimem/test.gtiff', Width => 256, Type => 'Float64');
 $band = $dataset->Band;
 
 $data = $band->ReadTile;
