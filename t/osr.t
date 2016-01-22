@@ -1,35 +1,35 @@
 use strict;
 use warnings;
-use Test::File::ShareDir -share => { -dist => {'Geo-GDAL' => 'share'} };
-use File::ShareDir qw( dist_dir );
 use Test::More qw(no_plan);
 BEGIN { use_ok('Geo::GDAL') };
 
-{
-    my $datadir = dist_dir('Geo-GDAL');
-    if ($datadir && open(my $fh, "<", $datadir.'/gdal-datadir')) {
-        $datadir = <$fh>;
-        chomp($datadir);
-        close $fh;
-        Geo::GDAL::PushFinderLocation($datadir);
-    }
+my $find = Geo::GDAL::FindFile('', 'pcs.csv');
+unless ($find) {
+    Geo::GDAL::PushFinderLocation('./gdal/data');
+    $find = Geo::GDAL::FindFile('', 'pcs.csv');
 }
 
-my $srs1 = Geo::OSR::SpatialReference->new(EPSG=>2936);
-my $srs2 = Geo::OSR::SpatialReference->new(Text=>$srs1->AsText);
-
-ok($srs1->ExportToProj4 eq $srs2->ExportToProj4, "new EPSG, Text, Proj4");
-
-my $src = Geo::OSR::SpatialReference->new(EPSG => 2392);
-my $dst = Geo::OSR::SpatialReference->new(EPSG => 2393);
-ok(($src and $dst), "new Geo::OSR::SpatialReference");
-
-eval {
-    Geo::OSR::CoordinateTransformation->new($src, $dst);
-};
+SKIP: {
+    skip "GDAL data files are not available", 2 if !$find;
+    my $srs1 = Geo::OSR::SpatialReference->new(EPSG=>2936);
+    my $srs2 = Geo::OSR::SpatialReference->new(Text=>$srs1->AsText);
+    ok($srs1->ExportToProj4 eq $srs2->ExportToProj4, "new EPSG, Text, Proj4");
+    my $src = Geo::OSR::SpatialReference->new(EPSG => 2392);
+    my $dst = Geo::OSR::SpatialReference->new(EPSG => 2393);
+    ok(($src and $dst), "new Geo::OSR::SpatialReference");
+}
 
 SKIP: {
+    skip "GDAL data files are not available", 3 if !$find;
+
+    my $src = Geo::OSR::SpatialReference->new(EPSG => 2392);
+    my $dst = Geo::OSR::SpatialReference->new(EPSG => 2393);
+
+    eval {
+        Geo::OSR::CoordinateTransformation->new($src, $dst);
+    };
     skip "libproj probably not installed: $@", 3 if $@;
+
     my ($t1, $t2);
     eval {
 	$t1 = Geo::OSR::CoordinateTransformation->new($src, $dst);
@@ -56,8 +56,6 @@ SKIP: {
     $t2->TransformPoints(\@points);
     $t2->TransformPoints(\@polygon);
 
-    ok(int($p1) == int($points[0][0]), "from EPSG 2392 to 2393 and back in line"); 
-    ok(int($p2) == int($polygon[0][0][0]), "from EPSG 2392 to 2393 and back in polygon"); 
-    
+    ok(int($p1) == int($points[0][0]), "from EPSG 2392 to 2393 and back in line");
+    ok(int($p2) == int($polygon[0][0][0]), "from EPSG 2392 to 2393 and back in polygon");
 }
-

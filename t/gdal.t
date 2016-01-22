@@ -1,19 +1,7 @@
 use strict;
 use warnings;
-use Test::File::ShareDir -share => { -dist => {'Geo-GDAL' => 'share'} };
-use File::ShareDir qw( dist_dir );
 use Test::More qw(no_plan);
 BEGIN { use_ok('Geo::GDAL') };
-
-{
-    my $datadir = dist_dir('Geo-GDAL');
-    if ($datadir && open(my $fh, "<", $datadir.'/gdal-datadir')) {
-        $datadir = <$fh>;
-        chomp($datadir);
-        close $fh;
-        Geo::GDAL::PushFinderLocation($datadir);
-    }
-}
 
 use vars qw/%available_driver %test_driver $loaded $verbose @types @fails @tested_drivers/;
 

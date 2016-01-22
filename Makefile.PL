@@ -4,7 +4,6 @@ use File::Basename;
 use ExtUtils::MakeMaker;
 use Config;
 use Cwd;
-use File::ShareDir::Install;
 
 # pick up our parameters from @ARGV
 my %ARGV;
@@ -179,9 +178,6 @@ if ($ARGV{'--debug'}) {
     print "INC = $INC\n";
 }
 
-install_share 'share';
-store_datadir_for_tests($source_tree, $config);
-
 for my $module (sort keys %object) {
     my $add = $module;
     $add =~ s/:/_/g;
@@ -230,7 +226,6 @@ for my $module (sort keys %object) {
                        'Cwd' => 0,
                        'File::Fetch' => 0,
                        'Capture::Tiny' => 0,
-                       'File::ShareDir::Install' => 0 
                    },
                    BUILD_REQUIRES => {
                        'strict' => 0,
@@ -241,7 +236,6 @@ for my $module (sort keys %object) {
                        'Cwd' => 0,
                        'File::Fetch' => 0,
                        'Capture::Tiny' => 0,
-                       'File::ShareDir::Install' => 0 
                    },
                    PREREQ_PM => {
                        Carp => 0,
@@ -252,8 +246,6 @@ for my $module (sort keys %object) {
                    TEST_REQUIRES => {
                        'Scalar::Util' => 0,
                        'Test::More' => 0,
-                       'Test::File::ShareDir' => 0,
-                       'File::ShareDir' => 0
                    },
         );
 }
@@ -463,24 +455,3 @@ sub parse_libtool_library_file_for_l {
     }
     return $l;
 }
-
-sub store_datadir_for_tests {
-    my ($source_tree, $config) = @_;
-    open(my $fh, ">", "share/gdal-datadir") or die "cannot open > share/gdal-datadir: $!";
-    if ($source_tree) {
-        $source_tree = Cwd::abs_path($source_tree);
-        print $fh "$source_tree/data\n";
-    }
-    elsif (-x $config) {
-        my $datadir;
-        chomp($datadir = `$config --datadir`);
-        print $fh "$datadir\n";
-    }
-    else {
-        print STDERR "I could not set GDAL data directory. Expect problems with tests.\n";
-    }
-    close $fh;
-}
-
-package MY;
-use File::ShareDir::Install qw(postamble);
