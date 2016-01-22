@@ -5,7 +5,7 @@ perl:
   - "5.10"
 
 before_install:
-  - sudo apt-get install libexpat-dev libpq-dev subversion libtest-file-sharedir-perl libfile-sharedir-perl
+  - sudo apt-get install libexpat-dev libpq-dev subversion libfile-sharedir-perl libtest-file-sharedir-perl
 
 install:
   - cpanm -v --installdeps --notest .
